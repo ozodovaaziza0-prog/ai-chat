@@ -1,0 +1,31 @@
+:root {
+  color-scheme: light;
+  --font: "Segoe UI", system-ui, sans-serif;
+  --accent: #15945f;
+  --accent-strong: #0f7a4c;
+  --accent-soft: #e5f6ee;
+  --on-accent: #ffffff;
+  --page-bg: #f2f6f3;
+  --page-text: #173026;
+  --muted: #5c7268;
+  --card: #ffffff;
+  --line: #dce8e2;
+  --header-text: #f4fff9;
+  --header-muted: rgba(244, 255, 249, 0.82);
+  --shadow: 0 16px 40px rgba(18, 48, 34, 0.16);
+  --panel: #ffffff;
+  --log: #f3f7f5;
+  --assistant-bubble: #ffffff;
+  --assistant-text: #173026;
+  --user-bubble: #15945f;
+  --user-text: #ffffff;
+  --meta: #6d847a;
+  --composer: #ffffff;
+  --input-border: #d3e3db;
+  --chip: #ffffff;
+  --chip-text: #0f7a4c;
+  --launcher: #15945f;
+  --danger: #d64545;
+  --radius-panel: 20px;
+  --space: 16px;
+}
