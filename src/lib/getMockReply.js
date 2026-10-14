@@ -1,6 +1,11 @@
 import { mockFallbackReplies, mockReplies } from '../mocks/replies.mock.js';
+import { getOffTopicReply, isColorRelatedQuestion } from './offTopicReply.js';
 
 export function getMockReply(text) {
+  if (!isColorRelatedQuestion(text)) {
+    return getOffTopicReply();
+  }
+
   const normalized = text.trim().toLowerCase();
   const match = mockReplies.find((item) =>
     item.keywords.some((keyword) => normalized.includes(keyword)),

@@ -27,6 +27,7 @@
 .chat-icon-button:focus-visible,
 .chat-quick__chip:focus-visible,
 .chat-composer__send:focus-visible,
+.chat-composer__mic:focus-visible,
 .chat-composer__input:focus-visible {
   outline: 3px solid var(--accent-soft);
   outline-offset: 2px;
@@ -338,8 +339,13 @@
   border: 0;
 }
 
-.chat-composer__input {
+.chat-composer__field {
   flex: 1;
+  min-width: 0;
+}
+
+.chat-composer__input {
+  width: 100%;
   resize: none;
   min-height: 42px;
   max-height: 96px;
@@ -349,6 +355,37 @@
   font: inherit;
   color: var(--page-text);
   background: var(--log);
+}
+
+.chat-composer__hint {
+  margin: 4px 2px 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.3;
+}
+
+.chat-composer__mic {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--input-border);
+  border-radius: 50%;
+  background: var(--log);
+  color: var(--page-text);
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.chat-composer__mic--active {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.chat-composer__mic:disabled {
+  cursor: default;
+  opacity: 0.55;
 }
 
 .chat-composer__send {

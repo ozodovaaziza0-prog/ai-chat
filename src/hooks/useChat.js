@@ -3,7 +3,7 @@ import { requestAssistantReply } from '../api/chat.js';
 import { getMockReply } from '../lib/getMockReply.js';
 import { createMockMessage, getMockMessages } from '../mocks/messages.mock.js';
 
-const useMocks = import.meta.env.VITE_USE_MOCKS !== 'false';
+const useMocks = import.meta.env.VITE_USE_MOCKS === 'true';
 
 function wait(ms) {
   return new Promise((resolve) => {
@@ -11,14 +11,25 @@ function wait(ms) {
   });
 }
 
-async function loadReply(text) {
+function buildApiMessages(messages, userText) {
+  const visible = messages
+    .filter((message) => message.text?.trim())
+    .map((message) => ({
+      role: message.role,
+      text: message.text.trim(),
+    }));
+
+  return [...visible, { role: 'user', text: userText.trim() }];
+}
+
+async function loadReply(text, messages) {
   if (useMocks) {
     const delay = 800 + Math.random() * 700;
     await wait(delay);
     return getMockReply(text);
   }
 
-  return requestAssistantReply(text);
+  return requestAssistantReply(buildApiMessages(messages, text));
 }
 
 export function useChat(isOpen) {
@@ -49,13 +60,17 @@ export function useChat(isOpen) {
       status: 'sent',
     });
 
-    setMessages((current) => [...current, userMessage]);
+    let historyForApi = [];
+    setMessages((current) => {
+      historyForApi = current;
+      return [...current, userMessage];
+    });
     setIsTyping(true);
 
     const requestId = requestIdRef.current + 1;
     requestIdRef.current = requestId;
 
-    loadReply(text)
+    loadReply(text, historyForApi)
       .then((replyText) => {
         if (requestIdRef.current !== requestId) return;
 
@@ -75,12 +90,17 @@ export function useChat(isOpen) {
           setUnreadCount((count) => count + 1);
         }
       })
-      .catch(() => {
+      .catch((error) => {
         if (requestIdRef.current !== requestId) return;
+
+        const hint =
+          error instanceof Error && error.message
+            ? error.message
+            : 'Не получилось получить ответ. Попробуйте ещё раз чуть позже.';
 
         const assistantMessage = createMockMessage({
           role: 'assistant',
-          text: 'Не получилось получить ответ. Попробуйте ещё раз чуть позже.',
+          text: hint,
           status: 'sent',
         });
 
